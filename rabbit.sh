@@ -75,10 +75,14 @@ _createExchange()
     -XPUT -d "{\"type\":\"$exchange_type\",\"durable\":$exchange_durable}" \
     http://$rabbit_host:15672/api/exchanges/$vhost/$exchange)
     result_check="HTTP/1.1 204 No Content"
+    exists_check="{\"error\":\"bad_request\",\"reason\":\"406 PRECONDITION_FAILED - cannot redeclare exchange"
 
     if [[ $result == *"$result_check"* ]]
     then
         echo "Exchange Created"
+    elif [[ $result == *"$exists_check"* ]]
+    then
+        echo "Exchange Already Exists :/"
     else
         echo "Ops! Something went wrong :("
     fi
