@@ -1,5 +1,9 @@
 # Rabbit HTTP API Minion
 
+- [Minion Helper Usage](Minion.md)
+
+- [Minion Importer Usage](Minion_Importer.md)
+
 ## Dependências
 
 ```
