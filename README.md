@@ -15,33 +15,39 @@ rabbitmq-plugins enable rabbitmq_management
  - Ideal seria ter um user específico de managment, porém podemos utilziar o
  guest:guest que deve ter acesso a todos os vhosts e tudão
 
-## Verificar se tem o vhost
+
+## Lista de Vhosts
 
 ```
-$ curl -i -u guest:guest http://host:15672/api/vhosts
+curl -i -u USER:PWD http://HOST:15672/api/vhosts
 ```
 
-```
-HTTP/1.1 200 OK
-Server: MochiWeb/1.1 WebMachine/1.10.0 (never breaks eye contact)
-Date: Mon, 16 Sep 2013 12:00:02 GMT
-Content-Type: application/json
-Content-Length: 30
+## Criar um vhost
 
-[{"name":"/","tracing":false}]
-```
-
-## Criar o vhost
+- VHOST_NAME: Nome do novo Vhost
 
 ```
-$ curl -i -u guest:guest -H "content-type:application/json" \
-   -XPUT http://host:15672/api/vhosts/ivan
+curl -i -u USER:PWD -H "content-type:application/json" \
+   -XPUT http://HOST:15672/api/vhosts/VHOST_NAME
 ```
 
+## Lista de Exchanges de um Vhost
+
+- VHOST_NAME: Nome do Vhost ou default "/" utilizar "%2f"
+
 ```
-HTTP/1.1 204 No Content
-Server: MochiWeb/1.1 WebMachine/1.10.0 (never breaks eye contact)
-Date: Mon, 16 Sep 2013 12:03:00 GMT
-Content-Type: application/json
-Content-Length: 0
+curl -i -u USER:PWD http://HOST:15672/api/exchanges/VHOST_NAME
+```
+
+## Criar uma exchange
+
+- VHOST_NAME: Nome do Vhost ou default "/" utilizar "%2f"
+- EXCHANGE_NAME: Nome da nova Exchange
+- type: tipo da exchange (direct, topic, fanout, headers)
+- durable: true|false
+
+```
+curl -i -u USER:PWD -H "content-type:application/json" \
+    -XPUT -d'{"type":"direct","durable":true}' \
+    http://HOST:15672/api/exchanges/VHOST_NAME/EXCHANGE_NAME
 ```

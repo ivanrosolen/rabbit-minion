@@ -9,8 +9,8 @@ Run
 ## Rabbit Vars
 
 - Rabbit Host
-- Rabbit User (managment full access)
-- Rabbit Password (managment full access)
+- Rabbit User (administrator)
+- Rabbit Password (administrator)
 
 ## Options
 
@@ -18,4 +18,11 @@ Run
   - Vhost name
 - Create Vhost
   - Vhost name
-
+- Check Exchange
+  - Vhost name
+  - Exchange name
+- Create Exchange
+  - Vhost name
+  - Exchange name
+  - Exchange type (direct|topic|fanout|headers)
+  - Exchange durable (true|false)
