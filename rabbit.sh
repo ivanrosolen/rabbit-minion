@@ -49,8 +49,8 @@ _checkExchange()
     echo "Exchange name:"
     read exchange
     echo "Checking Exchange ..."
-    EXCHANGES=$(curl -s -i -u $rabbit_user:$rabbit_pwd http://$rabbit_host:15672/api/exchanges/$vhost)
-    EXCHANGE_CHECK="{\"name\":\"$exchange\","
+    EXCHANGES=$(curl -s -i -u $rabbit_user:$rabbit_pwd http://$rabbit_host:15672/api/exchanges/$vhost/$exchange)
+    EXCHANGE_CHECK="\"name\":\"$exchange\",\"vhost\":\"$vhost\","
 
     if [[ $EXCHANGES == *"$EXCHANGE_CHECK"* ]]
     then
