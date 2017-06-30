@@ -135,6 +135,59 @@ _createQueue()
     fi
 }
 
+_checkBinding()
+{
+
+    echo "Vhost name:"
+    read vhost
+    echo "Queue name:"
+    read queue
+    echo "Exchange name:"
+    read exchange
+    echo "Checking Binding ..."
+    BINDING=$(curl -s -i -u $rabbit_user:$rabbit_pwd http://$rabbit_host:15672/api/bindings/$vhost/e/$exchange/q/$queue)
+    BINDING_EXCHANGE_QUEUE="{\"source\":\"$exchange\",\"vhost\":\"$vhost\",\"destination\":\"$queue\","
+
+    if [[ $BINDING == *"$BINDING_EXCHANGE_QUEUE"* ]]
+    then
+        echo "Yeah! It's Alive"
+    else
+        echo "Nope! You may create a new one"
+    fi
+}
+
+_createBinding()
+{
+    echo "Vhost name:"
+    read vhost
+    echo "Queue name:"
+    read queue
+    echo "Exchange name:"
+    read exchange
+    echo "Routing Key name (optional):"
+    read routingkey
+    echo "Creating Binding ..."
+    result=$(curl -s -i -u $rabbit_user:$rabbit_pwd -H "content-type:application/json" \
+    -XPOST -d "{\"routing_key\":\"$routingkey\"}" \
+    http://$rabbit_host:15672/api/bindings/$vhost/e/$exchange/q/$queue)
+    result_check="HTTP/1.1 201 Created"
+    exchange_exists_check="{\"error\":\"not_found\",\"reason\":\"NOT_FOUND - no exchange '$exchange' in vhost '$vhost'\"}"
+    queue_exists_check="{\"error\":\"not_found\",\"reason\":\"NOT_FOUND - no queue '$queue' in vhost '$vhost'\"}"
+
+    if [[ $result == *"$result_check"* ]]
+    then
+        echo "Binding Created"
+    elif [[ $result == *"$exchange_exists_check"* ]]
+    then
+        echo "Exchange Not Exists :/"
+    elif [[ $result == *"$queue_exists_check"* ]]
+    then
+        echo "Queue Not Exists :/"
+    else
+        echo "Ops! Something went wrong :("
+    fi
+}
+
 
 echo "Rabbit Host:"
 read rabbit_host
@@ -154,6 +207,8 @@ options=(
 "Create Exchange"
 "Check Queue"
 "Create Queue"
+"Check Binding"
+"Create Binding"
 "Quit"
 )
 
@@ -186,6 +241,14 @@ do
             ;;
         "Create Queue")
             _createQueue
+            break
+            ;;
+        "Check Binding")
+            _checkBinding
+            break
+            ;;
+        "Create Binding")
+            _createBinding
             break
             ;;
         "Quit")

@@ -143,3 +143,16 @@ curl -i -u USER:PWD http://HOST:15672/api/queues/VHOST_NAME/QUEUE_NAME/bindings/
 ```
 curl -i -u USER:PWD http://HOST:15672/api/bindings/VHOST_NAME/e/EXCHANGE_NAME/q/QUEUE_NAME
 ```
+
+## Criar um Binding
+
+- VHOST_NAME: Nome do Vhost ou default "/" utilizar "%2f"
+- QUEUE_NAME: Nome da Queue
+- EXCHANGE_NAME: Nome da exchange
+- ROUTING_KEY: Nome do routing-key (optional)
+
+```
+curl -i -u USER:PWD -H "content-type:application/json" \
+    -XPOST -d'{"routing_key":"ROUTING_KEY"}' \
+    http://HOST:15672/api/bindings/VHOST_NAME/e/EXCHANGE_NAME/q/QUEUE_NAME
+```

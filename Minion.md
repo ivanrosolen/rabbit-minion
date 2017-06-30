@@ -40,3 +40,12 @@ Run
   - Queue name
   - Queue durable (true|false)
   - Queue auto-delete (true|false)
+- Check Binding
+  - Vhost name
+  - Queue name
+  - Exchange name
+- Create Binding
+  - Vhost name
+  - Queue name
+  - Exchange name
+  - Routing Key name (optional)
