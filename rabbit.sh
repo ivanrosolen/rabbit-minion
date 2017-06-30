@@ -12,8 +12,8 @@ _checkVhost()
     echo "Vhost name:"
     read vhost
     echo "Checking Vhost ..."
-    VHOSTS=$(curl -s -i -u $rabbit_user:$rabbit_pwd http://$rabbit_host:15672/api/vhosts)
-    VHOST_CHECK="{\"name\":\"$vhost\",\"tracing\":false}"
+    VHOSTS=$(curl -s -i -u $rabbit_user:$rabbit_pwd http://$rabbit_host:15672/api/vhosts/$vhost)
+    VHOST_CHECK=",\"name\":\"$vhost\",\"tracing\":false}"
 
     if [[ $VHOSTS == *"$VHOST_CHECK"* ]]
     then
@@ -30,7 +30,7 @@ _createVhost()
     read vhost
     echo "Creating Vhost ..."
     result=$(curl -s -i -u $rabbit_user:$rabbit_pwd -H "content-type:application/json" \
-    -XPUT http://$rabbit_host:15672/api/vhosts/foo)
+    -XPUT http://$rabbit_host:15672/api/vhosts/$vhost)
     result_check="HTTP/1.1 204 No Content"
 
     if [[ $result == *"$result_check"* ]]
@@ -88,6 +88,53 @@ _createExchange()
     fi
 }
 
+_checkQueue()
+{
+
+    echo "Vhost name:"
+    read vhost
+    echo "Queue name:"
+    read queue
+    echo "Checking Queue ..."
+    QUEUES=$(curl -s -i -u $rabbit_user:$rabbit_pwd http://$rabbit_host:15672/api/queues/$vhost)
+    EXCHANGE_QUEUE="\"status\":\"running\",\"name\":\"$queue\",\"vhost\":\"$vhost\",\"durable\""
+
+    if [[ $QUEUES == *"$EXCHANGE_QUEUE"* ]]
+    then
+        echo "Yeah! It's Alive"
+    else
+        echo "Nope! You may create a new one"
+    fi
+}
+
+_createQueue()
+{
+    echo "Vhost name:"
+    read vhost
+    echo "Queue name:"
+    read queue
+    echo "Queue durable (true|false):"
+    read durable
+    echo "Queue auto-delete (true|false):"
+    read autodelete
+    echo "Creating Queue ..."
+    result=$(curl -s -i -u $rabbit_user:$rabbit_pwd -H "content-type:application/json" \
+    -XPUT -d "{\"durable\":$durable,\"auto_delete\":$autodelete}" \
+    http://$rabbit_host:15672/api/queues/$vhost/$queue)
+    result_check="HTTP/1.1 204 No Content"
+    exists_check="{\"error\":\"bad_request\",\"reason\":\"406 PRECONDITION_FAILED - cannot redeclare exchange"
+
+    if [[ $result == *"$result_check"* ]]
+    then
+        echo "Queue Created"
+    elif [[ $result == *"$exists_check"* ]]
+    then
+        echo "Queue Already Exists :/"
+    else
+        echo "Ops! Something went wrong :("
+    fi
+}
+
 
 echo "Rabbit Host:"
 read rabbit_host
@@ -105,6 +152,8 @@ options=(
 "Create Vhost"
 "Check Exchange"
 "Create Exchange"
+"Check Queue"
+"Create Queue"
 "Quit"
 )
 
@@ -129,6 +178,14 @@ do
             ;;
         "Create Exchange")
             _createExchange
+            break
+            ;;
+        "Check Queue")
+            _checkQueue
+            break
+            ;;
+        "Create Queue")
+            _createQueue
             break
             ;;
         "Quit")

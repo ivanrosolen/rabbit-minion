@@ -26,3 +26,17 @@ Run
   - Exchange name
   - Exchange type (direct|topic|fanout|headers)
   - Exchange durable (true|false)
+- Check Queue
+  - Vhost name
+  - Queue name
+- Create Queue
+  - Vhost name
+  - Queue name
+- Check Queue
+  - Vhost name
+  - Queue name
+- Create Queue
+  - Vhost name
+  - Queue name
+  - Queue durable (true|false)
+  - Queue auto-delete (true|false)
