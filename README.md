@@ -22,6 +22,14 @@ rabbitmq-plugins enable rabbitmq_management
 curl -i -u USER:PWD http://HOST:15672/api/vhosts
 ```
 
+## Informações de um Vhost
+
+- VHOST_NAME: Nome do novo Vhost
+
+```
+curl -i -u USER:PWD http://HOST:15672/api/vhosts/VHOST_NAME
+```
+
 ## Criar um vhost
 
 - VHOST_NAME: Nome do novo Vhost
@@ -39,6 +47,15 @@ curl -i -u USER:PWD -H "content-type:application/json" \
 curl -i -u USER:PWD http://HOST:15672/api/exchanges/VHOST_NAME
 ```
 
+## Informações de uma Exchange
+
+- VHOST_NAME: Nome do novo Vhost
+- EXCHANGE_NAME: Nome da nova Exchange
+
+```
+curl -i -u USER:PWD http://HOST:15672/api/exchanges/VHOST_NAME/EXCHANGE_NAME
+```
+
 ## Criar uma exchange
 
 - VHOST_NAME: Nome do Vhost ou default "/" utilizar "%2f"
@@ -52,7 +69,6 @@ curl -i -u USER:PWD -H "content-type:application/json" \
     http://HOST:15672/api/exchanges/VHOST_NAME/EXCHANGE_NAME
 ```
 
-
 ## Lista de Queues de um Vhost
 
 - VHOST_NAME: Nome do Vhost ou default "/" utilizar "%2f"
@@ -61,15 +77,24 @@ curl -i -u USER:PWD -H "content-type:application/json" \
 curl -i -u USER:PWD http://HOST:15672/api/queues/VHOST_NAME
 ```
 
-## Criar uma exchange
+## Informações de uma Queue
+
+- VHOST_NAME: Nome do novo Vhost
+- QUEUE_NAME: Nome da nova Queue
+
+```
+curl -i -u USER:PWD http://HOST:15672/api/queues/VHOST_NAME/QUEUE_NAME
+```
+
+## Criar uma Queue
 
 - VHOST_NAME: Nome do Vhost ou default "/" utilizar "%2f"
-- QUEUE_NAME: Nome da nova Exchange
+- QUEUE_NAME: Nome da nova Queue
 - auto-delete: true|false
 - durable: true|false
 
 ```
 curl -i -u USER:PWD -H "content-type:application/json" \
     -XPUT -d'{"auto_delete":"false","durable":true}' \
-    http://HOST:15672/api/queues/VHOST_NAME/EXCHANGE_NAME
+    http://HOST:15672/api/queues/VHOST_NAME/QUEUE_NAME
 ```
