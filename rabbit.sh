@@ -97,7 +97,7 @@ _checkQueue()
     read queue
     echo "Checking Queue ..."
     QUEUES=$(curl -s -i -u $rabbit_user:$rabbit_pwd http://$rabbit_host:15672/api/queues/$vhost)
-    EXCHANGE_QUEUE="\"status\":\"running\",\"name\":\"$queue\",\"vhost\":\"$vhost\",\"durable\""
+    EXCHANGE_QUEUE="\"name\":\"$queue\",\"vhost\":\"$vhost\",\"durable\""
 
     if [[ $QUEUES == *"$EXCHANGE_QUEUE"* ]]
     then
