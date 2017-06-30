@@ -122,7 +122,7 @@ _createQueue()
     -XPUT -d "{\"durable\":$durable,\"auto_delete\":$autodelete}" \
     http://$rabbit_host:15672/api/queues/$vhost/$queue)
     result_check="HTTP/1.1 204 No Content"
-    exists_check="{\"error\":\"bad_request\",\"reason\":\"406 PRECONDITION_FAILED - cannot redeclare exchange"
+    exists_check="{\"error\":\"bad_request\",\"reason\":\"406 PRECONDITION_FAILED - parameters for queue '$queue' in vhost '$vhost' not equivalent\"}"
 
     if [[ $result == *"$result_check"* ]]
     then
